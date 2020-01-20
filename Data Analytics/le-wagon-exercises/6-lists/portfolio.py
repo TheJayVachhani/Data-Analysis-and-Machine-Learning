@@ -15,6 +15,6 @@ def pnl(pfl, mkt):
     result = []
     for n, value in enumerate(mkt):
         result.append(pfl[n][0] * (value - pfl[n][1]))
-    product = sum(float(n) for n in result)
+    product = round(sum(float(n) for n in result), 2)
     return product
 print (pnl(portfolio, market))
