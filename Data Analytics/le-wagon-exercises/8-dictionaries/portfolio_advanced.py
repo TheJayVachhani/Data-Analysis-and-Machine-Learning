@@ -1,6 +1,9 @@
 # pylint: disable=missing-docstring
 
 # TODO: start by defining a `portfolio` using a dict!
+
+import requests
+
 portfolio = {
     "AAPL" : {
         "quantity" : 10,
@@ -42,4 +45,18 @@ def pnl(pfl, mkt):
         result.append(pfl[name]["quantity"] * (price - pfl[name]["strike"]))
     product = round(sum(float(n) for n in result), 2)
     return product
-print(pnl(portfolio, market))
+# print(pnl(portfolio, market))
+
+url = "https://api.iextrading.com/1.0/tops/last?symbols=AAPL,GOOG,TSLA,FB"
+real_time_market = requests.get(url).json()
+
+market = dict((stock["symbol"], stock["price"]) for stock in real_time_market)
+# the method ^ above is the same, using a list comprehension, as the one below ->
+# for stock in real_time_market:
+#     market[stock["symbol"]] = stock["price"]
+
+symbols = ",".join(portfolio.keys())
+url = f"https://api.iextrading.com/1.0/tops/last?symbols={symbols}"
+real_time_market = requests.get(url).json()
+
+market = dict((stock["symbol"], stock["price"]) for stock in real_time_market)
